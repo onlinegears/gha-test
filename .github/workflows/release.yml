@@ -4,18 +4,32 @@ on:
   push:
     branches: [ main ]
 
+env:
+  latest: ubuntu-20.04
+
 jobs:
   build:
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ ubuntu-22.04, ubuntu-20.04 ]
+    runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build
         run: make
+      - name: Save latest
+        if: env.latest == matrix.os
+        run: |
+          cp -a helloworld helloworld-latest
+      - name: Rename
+        run: |
+          ls -lR
+          mv helloworld helloworld-${{ matrix.os }}
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           name: Latest Release
           tag_name: latest
           files: |
-            helloworld
+            helloworld-*
