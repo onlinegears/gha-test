@@ -49,8 +49,9 @@ jobs:
         run: go build -o go-helloworld-${{ matrix.goos }}-${{ matrix.goarch }}
         working-directory: ./go
       - name: Rename Windows exe
-        if: matrix.goos == env.windows
+        if: env.windows == matrix.goos
         run: mv go-helloworld-windows-${{ matrix.goarch }} go-helloworld-windows-${{ matrix.goarch }}.exe
+        working-directory: ./go
       - name: Show files
         run: ls -lR
         working-directory: ./go
