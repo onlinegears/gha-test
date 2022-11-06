@@ -46,7 +46,7 @@ jobs:
       - name: Show go version
         run: go version
       - name: Build
-        run: go build -o go-helloworld-${{ matrix.goos }}-${{ matrix.goarch }}
+        run: GOOS=${{ matrix.goos}} GOARCH=${{ matrix.goarch }} go build -o go-helloworld-${{ matrix.goos }}-${{ matrix.goarch }}
         working-directory: ./go
       - name: Rename Windows exe
         if: env.windows == matrix.goos
