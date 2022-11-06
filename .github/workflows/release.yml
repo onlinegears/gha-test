@@ -6,6 +6,7 @@ on:
 
 env:
   latest: ubuntu-20.04
+  windows: windows
 
 jobs:
   build:
@@ -46,7 +47,7 @@ jobs:
         run: go version && go build -o go-helloworld-${{ matrix.goos }}-${{ matrix.goarch }}
         working-directory: ./go
       - name: Rename Windows exe
-        if: matrix.goos == "windows"
+        if: matrix.goos == env.windows
         run: mv go-helloworld-windows-${{ matrix.goarch }} go-helloworld-windows-${{ matrix.goarch }}.exe
       - name: Show files
         run: ls -lR
