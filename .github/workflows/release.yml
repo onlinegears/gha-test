@@ -34,10 +34,17 @@ jobs:
           files: |
             helloworld-*
   build-go:
+    strategy:
+      matrix:
+        goos: [ linux, windows ]
+        goarch: [ amd64, arm64 ]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build
-        run: go build
+        run: go build -o go-helloworld-${{ matrix.goos }}-${{ matrix.goarch }}
+        working-directory: ./go
+      - name: Show files
+        run: ls -lR
         working-directory: ./go
