@@ -43,8 +43,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build
-        run: go build -o go-helloworld-${{ matrix.goos }}-${{ matrix.goarch }}
+        run: go version && go build -o go-helloworld-${{ matrix.goos }}-${{ matrix.goarch }}
         working-directory: ./go
+      - name: Rename Windows exe
+        if: matrix.goos == "windows"
+        run: mv go-helloworld-windows-${{ matrix.goarch }} go-helloworld-windows-${{ matrix.goarch }}.exe
       - name: Show files
         run: ls -lR
         working-directory: ./go
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Latest Release
+          tag_name: latest
+          files: |
+            go/go-helloworld-*
